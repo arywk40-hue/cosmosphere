@@ -5,7 +5,7 @@ review on 2026-08-16. The submitted PDF should contain none of it.
 
 ---
 
-## 1. Blockers — resolve before 18 Sep 2026
+## 1. Blockers — resolve before 17 Sep 2026
 
 | # | Blocker | Source |
 |---|---------|--------|
@@ -75,8 +75,12 @@ numbers cost real marks.
 10. **Removed from the submitted PDF**: the judging-criteria alignment section (quoting the
     rubric percentages back at judges reads as writing-to-the-rubric), the open-items
     checklist (shows unfinished work), and the Phase 2 criteria note (judges know them).
-11. **Dropped "12:00am WIB"** from the deadline line — unverified, and 12:00am on 18 Sep
-    would effectively mean end of 17 Sep. Confirm the real cutoff time on Devpost.
+11. **Deadline is 17 Sep 2026**, per the team. This resolves the odd "18 Sep 2026, 12:00am
+    WIB" in the earlier draft: midnight at the *start* of 18 Sep is end of day 17 Sep.
+    Note that `README.md` and `RULES.MD` (both pasted from the official site) still say
+    18 Sep — left unedited so the official wording is preserved, but **work to 17 Sep**.
+    Worth confirming the exact hour on Devpost, since "end of 17 Sep" in WIB is earlier
+    than it looks from any other timezone.
 12. **Dropped "(COMPSPHERE 11)"** from the running header — the "11" is not in any of our
     source documents. Restore if the guidebook confirms it.
 
