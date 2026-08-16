@@ -3,6 +3,10 @@
 Everything in this file was moved out of `cosmosphere.tex` or found during the alignment
 review on 2026-08-16. The submitted PDF should contain none of it.
 
+**Submission destination:** Devpost challenge `30851-compsphere-11` ("COMPSPHERE 11"),
+project `1139314`. Phase 1 deadline **17 Sep 2026** — confirm the exact hour in WIB
+(UTC+7), which is earlier in wall-clock terms than it reads from other timezones.
+
 ---
 
 ## 1. Blockers — resolve before 17 Sep 2026
@@ -81,8 +85,14 @@ numbers cost real marks.
     18 Sep — left unedited so the official wording is preserved, but **work to 17 Sep**.
     Worth confirming the exact hour on Devpost, since "end of 17 Sep" in WIB is earlier
     than it looks from any other timezone.
-12. **Dropped "(COMPSPHERE 11)"** from the running header — the "11" is not in any of our
-    source documents. Restore if the guidebook confirms it.
+12. **Running header is "COMPSPHERE 11"**, confirmed by the team against the Devpost
+    challenge slug (`30851-compsphere-11`). I had wrongly stripped the "11" as unverified
+    in the first pass — it is correct, and COMPSPHERE 11 (not HACKSPHERE) is the name of
+    the challenge being submitted to.
+    **Unreconciled:** `README.md` describes "HACKSPHERE 2026" as the hackathon *within*
+    Computer Science Atmosphere (COMPSPHERE). Both names may be in legitimate use — event
+    vs. track — but the header matches the Devpost challenge, which is where it is judged.
+    Confirm against the guidebook when it is released.
 
 ---
 
