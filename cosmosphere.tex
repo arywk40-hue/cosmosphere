@@ -1,0 +1,189 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+
+\definecolor{accent}{HTML}{2E7D32}
+\definecolor{ruleclr}{HTML}{CCCCCC}
+\definecolor{todoclr}{HTML}{C62828}
+
+\titleformat{\section}{\large\bfseries\color{accent}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.4em}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  urlcolor=accent,
+  citecolor=accent
+}
+
+\newcommand{\teamfield}[1]{\textcolor{gray!70}{[#1]}}
+% Visible on purpose: every \needcite must be resolved before submitting.
+\newcommand{\needcite}[1]{\textcolor{todoclr}{\small\textsuperscript{[cite: #1]}}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{ruleclr}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\small HACKSPHERE 2026 -- Phase 1 Proposal Idea}
+\fancyhead[R]{\small \thepage}
+\fancyfoot[C]{\small \textit{PlotProof} -- Team \teamfield{TEAM NAME}}
+
+\begin{document}
+
+% ---------- Title ----------
+\begin{center}
+  {\Huge\bfseries\color{accent} PlotProof}\\[0.4em]
+  {\large Satellite baseline $+$ farmer-captured ground proof, anchored on-chain:}\\
+  {\large EUDR-grade plot evidence for sub-hectare smallholders, without a field agent}\\[1em]
+  \teamfield{Team name} \quad $\vert$ \quad Ariyan, Ritika, \teamfield{third member -- required} \quad $\vert$ \quad Category: International Student\\[0.3em]
+  \today \quad $\vert$ \quad Phase 1 deadline: 18 September 2026
+\end{center}
+
+\vspace{0.5em}
+\noindent\textcolor{ruleclr}{\rule{\linewidth}{0.6pt}}
+\vspace{0.5em}
+
+% ---------- Executive Summary ----------
+\section{Executive Summary}
+From 30 December 2026, the EU Deforestation Regulation (EUDR) requires large and medium operators to prove that the palm oil they place on the EU market came only from plots not deforested after 31 December 2020 -- and to hold the geolocation of every one of those plots \cite{eudr-dates,eudr-text}. The regulated party is the European buyer, but the evidence has to come from the farm. For Indonesia's independent smallholders, whose plots are typically under a hectare, that evidence today is produced by paid human field agents walking plots one at a time. That model cannot reach millions of plots, so buyers de-risk by sourcing from large plantations instead, and smallholders are quietly dropped from EU-bound supply chains.
+
+\textbf{PlotProof} removes the field agent from the critical path. The compliance verdict is derived from the public satellite archive, which is keyed to coordinates and cannot be influenced by the farmer; the farmer's phone supplies what satellites cannot resolve at sub-hectare scale -- which plot, in what state, right now. A challenge-response capture flow and on-device forensic model make that evidence hard to fake, a cooperative co-signature makes it socially accountable, and the result is anchored on a public ledger so no operator can later omit, backdate, or edit an inconvenient record. Farmers are paid per \emph{valid submission}, never per clean verdict -- so no one is ever paid to lie.
+
+% ---------- Problem Statement ----------
+\section{Problem Statement}
+
+\subsection{The legal test is historical, and nobody can currently meet it at smallholder scale}
+EUDR Article 2(13) defines ``deforestation-free'' as produced on land not subject to deforestation \emph{after 31 December 2020} \cite{eudr-text}. This is a claim about the past, not about how a plot looks today, and it is the requirement every existing smallholder solution struggles with. Article 2(28) additionally requires geolocation ``using at least six decimal digits'' of latitude and longitude, and mandates full boundary polygons only for plots larger than four hectares \cite{eudr-text}.
+
+\subsection{The evidence gap is a cost problem, not a technology problem}
+\begin{itemize}[leftmargin=1.4em]
+  \item Independent smallholders farm roughly 40\% of Indonesia's oil palm area\needcite{Indonesian Ministry of Agriculture / RSPO}, but only a small fraction hold the certification or plot-level documentation that EUDR-driven due diligence now demands\needcite{RSPO smallholder certification figures}.
+  \item Sentinel-2 imagery at 10\,m resolution reliably flags clearings on the order of half a hectare and above. Higher-resolution public sources exist -- Planet NICFI mosaics at roughly 4.8\,m, and RADD/GLAD alert products -- but at the scale of a sub-hectare smallholder plot, alerts become ambiguous: an alert may be a genuine clearing, a replanting cycle, a harvest road, or cloud artefact. \textbf{Satellites are excellent at flagging; they are weak at adjudicating.}
+  \item Adjudication is therefore done by paid human field agents. That cost is linear in the number of plots, which is precisely why traceability platforms onboard large exporters first. The cost is either passed down to the farmer or the farmer is excluded.
+  \item Existing blockchain work in this sector -- enterprise tokenisation pilots such as Unilever/SAP GreenToken -- records sustainability attributes \emph{after} a company has already verified them. They improve the ledger; they do not touch the verification bottleneck that sits upstream of it.
+\end{itemize}
+
+\subsection{Why smallholders still need this even though EUDR ``simplified''}
+The December 2025 amendment lets micro and small \emph{primary} operators substitute a postal address for plot geolocation, and pushes their own application date to 30 June 2027 \cite{eudr-dates,eudr-text}. This does not remove the demand for plot evidence: the EU importer is still a large or medium operator with a full due-diligence obligation from 30 December 2026, and a postal address does not let that importer assess deforestation risk. The requirement simply moves from statute into supply contracts -- which is where it becomes a market, and where buyers will pay for evidence they can defend to a regulator.
+
+% ---------- Proposed Solution ----------
+\section{Proposed Solution \& Value Proposition}
+
+PlotProof splits verification into the part machines already do well and the part that currently requires a human on site.
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Machine-side baseline (the verdict).} The farmer submits coordinates; the backend queries the public satellite archive at those coordinates for land-cover state at the 31 December 2020 cutoff and for any change alerts since. The deforestation verdict is derived here -- from data the farmer cannot influence. This is what makes the historical legal test answerable.
+  \item \textbf{Farmer-side ground truth (the disambiguation).} The app issues a random capture challenge -- a nonce shown on screen plus a randomly chosen compass bearing -- and the farmer photographs the plot with that nonce in frame. This defeats replay of a stored or borrowed photo, which a plain ``upload a picture'' flow cannot.
+  \item \textbf{On-device forensic and land-cover check.} A lightweight model verifies the nonce is present via OCR, detects photographs-of-displays, splices and reused images (perceptual hashing against prior submissions), and classifies visible land cover -- mature palm, young replant, recently cleared, burned, secondary forest. Its job is to answer one question: \emph{does the ground agree with the satellite?} Agreement clears the plot; disagreement routes it to human review instead of silently passing.
+  \item \textbf{Social attestation.} A cooperative officer or two neighbouring farmers co-sign the plot boundary ($m$-of-$n$ signatures on-chain). This substitutes existing local social capital for an imported field agent.
+  \item \textbf{On-chain anchoring.} Evidence hash, coordinates, satellite verdict, model score, and attester signatures are written to \texttt{PlotRegistry.sol}. Records are append-only and timestamped, so a buyer's due-diligence statement rests on evidence that provably existed before the shipment -- and cannot be quietly revised afterwards.
+  \item \textbf{Reward for valid submissions.} Payment is triggered by a \emph{well-formed, non-replayed, attested} submission -- not by a favourable verdict. A farmer who reports a genuine clearing is paid exactly the same as one who reports intact palm.
+\end{enumerate}
+
+\noindent\textbf{The differentiator in one line}: Koltiva-style platforms put a paid human between the plot and the record; enterprise pilots put a token after the record. PlotProof replaces the human adjudication step with satellite-plus-ground cross-checking, and makes the record itself independently auditable.
+
+% ---------- Trust model ----------
+\section{Anti-Fraud \& Trust Model}
+Self-reported evidence is only worth what it costs to fake. Four mechanisms, in ascending cost to an attacker:
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\textbf{Attack} & \textbf{Mitigation} \\
+\midrule
+Submit an old or borrowed photo & Random on-screen nonce $+$ bearing must appear in frame; perceptual-hash match against all prior submissions \\
+Spoof GPS or edit EXIF & Payload signed in-app with a hardware-backed key (Android Key Attestation / Play Integrity), server-side trusted timestamp; metadata is tamper-\emph{evident}, and integrity failures are flagged rather than assumed impossible \\
+Photograph a clean neighbouring plot & Coordinates drive the satellite query independently; $m$-of-$n$ cooperative co-signature binds the boundary to a known plot \\
+Collude with the cooperative & Randomised audit of a small percentage of plots (field or drone); a contradicted record slashes the submitter's accrued rewards and the attester's on-chain reputation. Buyers and NGOs may stake to open a dispute within a fixed challenge window \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{0.4em}
+\noindent Randomised audit with slashing is what keeps this honest at scale: it makes fraud negative-expected-value while auditing only a fraction of plots, rather than visiting all of them.
+
+% ---------- Why Web3 ----------
+\section{Why This Requires Web3}
+A conventional database would be cheaper, so the blockchain layer has to earn its place. It does, on three counts:
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Adverse-interest custody.} The party who benefits from a clean record (the operator) cannot be the party who stores it. Append-only anchoring makes omission and backdating detectable by a regulator who trusts neither the operator nor us.
+  \item \textbf{Provable evidence-before-shipment.} EUDR due diligence is time-ordered. An on-chain timestamp proves the evidence predates the due-diligence statement without a trusted third party.
+  \item \textbf{Programmable, conditional payout.} Reward release, staked disputes, and slashing are enforced by contract, not by our goodwill -- which matters when the recipient is a farmer with no leverage over us.
+\end{itemize}
+
+% ---------- MVP & Key Features ----------
+\section{MVP \& Key Features (24-hour build scope)}
+Scoped deliberately so every item is demonstrable live within the marathon window:
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Capture flow} (React Native / mobile web): challenge-response photo capture, GPS at six decimal digits, hardware-attested signed payload, offline-first queue that syncs when connectivity returns.
+  \item \textbf{Verification service} (Node.js): satellite baseline lookup by coordinate, nonce OCR, perceptual-hash reuse detection, zero-shot land-cover classification via a pre-trained vision model, and the agreement check between the two.
+  \item \textbf{\texttt{PlotRegistry.sol}} on Polygon Amoy testnet: plot registration, $m$-of-$n$ attestation, append-only evidence records, dispute window.
+  \item \textbf{\texttt{RewardPool.sol}}: pays per valid submission, with slashing on a contradicted audit. Gasless for farmers via an ERC-4337 paymaster, so a farmer never needs to hold a gas token.
+  \item \textbf{Buyer/regulator dashboard}: look up a plot by ID or QR, see its evidence chain, verdict provenance, and attesters -- exportable as a due-diligence annex.
+\end{enumerate}
+
+\noindent\textit{Model scope note}: the vision component is a pre-trained model applied zero-shot plus classical forensics, not a model trained during the hackathon. This is the honest 24-hour envelope and we would rather defend it than overclaim.
+
+% ---------- Tech Stack & Architecture ----------
+\section{Tech Stack \& System Architecture}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}l X l@{}}
+\toprule
+\textbf{Layer} & \textbf{Responsibility} & \textbf{Key tech} \\
+\midrule
+Client & Farmer capture app (offline-first); buyer/regulator lookup dApp & React Native, React, ethers.js \\
+Identity \& UX & Custodial/social-recovery wallet, gasless transactions & ERC-4337 account abstraction, paymaster \\
+Off-chain services & Satellite baseline lookup, forensic \& land-cover scoring, attestation relay & Node.js, pre-trained CV model, perceptual hashing \\
+Earth observation & 2020 baseline and change alerts by coordinate & Sentinel-2 archive, Planet NICFI, RADD/GLAD alerts \\
+Blockchain & Append-only plot records, attestation, conditional rewards, disputes & Solidity, Polygon Amoy testnet \\
+Storage & Photo evidence \& metadata (hash anchored on-chain) & IPFS \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{0.6em}
+\noindent\textbf{Data flow}: challenge issued $\rightarrow$ farmer captures nonce-in-frame photo $+$ GPS $\rightarrow$ payload signed on device $\rightarrow$ queued offline, synced on connectivity $\rightarrow$ satellite baseline queried by coordinate $\rightarrow$ forensic $+$ land-cover scoring $\rightarrow$ ground/satellite agreement check $\rightarrow$ cooperative co-signature $\rightarrow$ evidence pinned to IPFS $\rightarrow$ hash, verdict and signatures written to \texttt{PlotRegistry.sol} $\rightarrow$ \texttt{RewardPool.sol} pays the farmer for a valid submission $\rightarrow$ buyer queries the plot's evidence chain for its due-diligence statement $\rightarrow$ random audit or staked dispute may contradict the record and trigger slashing.
+
+\vspace{0.6em}
+\noindent\textit{[Architecture diagram to be inserted here before submission -- see accompanying export]}
+
+% ---------- Market ----------
+\section{Target Market, Business Model \& Impact Viability}
+
+\textbf{Who pays}: EU-side importers and Indonesian exporters, per verified plot. Their alternative is a field-agent visit, whose cost is linear per plot; PlotProof's marginal cost per plot is compute, storage, gas and the farmer's reward. That per-plot spread is the business, and it is what funds the reward pool -- the token is not subsidised by speculation.
+
+\textbf{Who benefits}: independent smallholders currently excluded from EU-bound chains, who gain both market access and a direct payment; cooperatives, which gain a role as on-chain attesters; buyers, who gain a defensible audit trail.
+
+\textbf{Scalability}: onboarding cost per farmer is flat rather than linear, because the expensive human step is replaced by a coordinate query and a cross-check. Audit cost scales with a sampling percentage, not with plot count.
+
+\textbf{Beyond palm oil}: EUDR covers seven commodities. The same plot-evidence primitive applies unchanged to cocoa, coffee, and rubber smallholders facing the identical deadline.
+
+% ---------- Risks ----------
+\section{Key Risks \& Mitigations}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Satellite baseline ambiguity at sub-hectare scale} -- the reason ground truth exists in this design; unresolvable cases are escalated to human review rather than passed.
+  \item \textbf{Regulator acceptance of self-captured evidence} -- addressed by making the verdict satellite-derived and the evidence independently auditable; PlotProof produces evidence for an operator's due-diligence file, and does not claim to issue compliance certificates.
+  \item \textbf{Farmer key management and cash-out} -- social-recovery custodial wallets and gasless transactions; local cooperative acts as on-ramp.
+  \item \textbf{Connectivity} -- offline-first capture with deferred sync; nothing in the capture flow requires live network.
+  \item \textbf{Attester collusion} -- randomised audit, slashing, and public attester reputation.
+\end{itemize}
+
+% ---------- References ----------
+\begin{thebibliography}{9}
+\bibitem{eudr-dates} European Commission, \emph{Regulation on deforestation-free products}. Entry into application: large and medium operators 30 December 2026; micro and small operators 30 June 2027. \url{https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en}
+\bibitem{eudr-text} Regulation (EU) 2023/1115, consolidated text (CELEX 02023R1115-20251226), Art. 2(13) ``deforestation-free'' (cutoff 31 December 2020), Art. 2(28) geolocation (six decimal digits; polygons required above four hectares), Art. 4a(5) and Art. 9(1)(d). \url{https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02023R1115-20251226}
+\end{thebibliography}
+
+\end{document}

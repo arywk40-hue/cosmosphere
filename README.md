@@ -1,7 +1,6 @@
 ABOUT THE CHALLENGE
 
 HACKSPHERE 2026 is the premier international-scale hackathon of Computer Science Atmosphere (COMPSPHERE), organized by President University Faculty Association Computer Science. This year, we invite visionary minds to explore the "Web3 Frontier" The challenge is to build decentralized solutions that leverage blockchain, advanced data security, and transparent architectures to solve real-world industrial problems.
-
 This is a Two-Phase Hybrid competition:
 
 Phase 1 (The Filtering): A 100% conceptual online phase where teams submit a strategic Proposal Idea.
